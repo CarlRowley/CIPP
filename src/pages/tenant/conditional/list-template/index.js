@@ -2,16 +2,25 @@ import { Layout as DashboardLayout } from "/src/layouts/index.js";
 import { CippTablePage } from "/src/components/CippComponents/CippTablePage.jsx";
 import { Button } from "@mui/material";
 import CippJsonView from "../../../../components/CippFormPages/CippJSONView";
-import { Delete, GitHub } from "@mui/icons-material";
+import { Delete, GitHub, Edit } from "@mui/icons-material";
 import { ApiGetCall } from "/src/api/ApiCall";
+import Link from "next/link";
 
 const Page = () => {
   const pageTitle = "Available Conditional Access Templates";
   const integrations = ApiGetCall({
     url: "/api/ListExtensionsConfig",
     queryKey: "Integrations",
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
   const actions = [
+    {
+      label: "Edit Template",
+      link: "/tenant/conditional/list-template/edit?GUID=[GUID]",
+      icon: <Edit />,
+      color: "info",
+    },
     {
       label: "Save to GitHub",
       type: "POST",
@@ -58,7 +67,7 @@ const Page = () => {
     },
     {
       label: "Delete Template",
-      type: "GET",
+      type: "POST",
       url: "/api/RemoveCATemplate",
       icon: <Delete />,
       data: { ID: "GUID" },
